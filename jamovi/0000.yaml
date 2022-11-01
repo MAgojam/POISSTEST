@@ -1,0 +1,21 @@
+---
+title: What the Package Does (Title Case)
+name: POISSTEST
+version: 0.0.0
+jms: '1.0'
+authors:
+  - João Marôco
+maintainer: The package maintainer <jpmaroco@gmail.com>
+date: '1970-01-01'
+type: R
+description: Does Poisson test and Confidence Intervals for Lambda
+analyses:
+  - title: Test and Confidence Intervals for Poisson
+    name: POISSTEST
+    ns: POISSTEST
+    menuGroup: POISSTEST
+    menuTitle: Test and Confidence Intervals for Poisson
+usesNative: true
+minApp: 1.0.8
+
+...
