@@ -36,7 +36,7 @@ POISSTESTClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
                 self$results$text$setContent(results)   
                 
-                table <- self$results$poi
+                table <- self$results$poisstest
                 
                 table$setRow(rowNo=1, values=list(
                     var=self$options$dep,
