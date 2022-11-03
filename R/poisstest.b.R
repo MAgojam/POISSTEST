@@ -46,7 +46,7 @@ POISSTESTClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 
             } else { #use summary data
                     
-                    results <- poisson.test(x=lmbda*time,
+                results <- poisson.test(x=lmbda*time,
                                             T=time,
                                             r=self$options$testValue, 
                                             alternative =self$options$alt, 
@@ -66,6 +66,8 @@ POISSTESTClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 table <- self$results$poissontest   #name of the last element comes from xx.r.yaml name
                 
                 
+                pval <- ifelse(results$p.value <.001, "<.001", results$p.value)
+                
                 tabTitStr <- paste0("Poisson Test: H0: lambda = ", testvalue)
                 tabTit <- jmvcore::format(tabTitStr, dep=self$options$dep)
                 table$setTitle(tabTit)
@@ -79,7 +81,7 @@ POISSTESTClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     NumberofEvents=results$statistic,
                     Intervalbase=results$parameter,
                     Eventrate=results$estimate,
-                    p=results$p.value,
+                    p=pval,
                     Lower=confi$lwr.ci[1],
                     Upper=confi$upr.ci[1]
                 ))
