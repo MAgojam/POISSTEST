@@ -67,8 +67,10 @@ POISSTESTClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 
                 
                 pval <- ifelse(results$p.value <.001, "<.001", results$p.value)
+                side <- ifelse(self$options$alt=="two.sided", "=", ifelse(self$options$alt=="greater", "<=", ">="))
                 
-                tabTitStr <- paste0("Poisson Test: H0: lambda = ", testvalue)
+                
+                tabTitStr <- paste0("Poisson Test: H0: lambda",side, testvalue)
                 tabTit <- jmvcore::format(tabTitStr, dep=self$options$dep)
                 table$setTitle(tabTit)
                 
