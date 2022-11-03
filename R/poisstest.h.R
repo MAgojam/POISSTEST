@@ -13,8 +13,7 @@ POISSTESTOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             alt = "two.sided",
             ci = "exact",
             conf = 0.95,
-            lambda = NULL,
-            n = NULL, ...) {
+            lambda = NULL, ...) {
 
             super$initialize(
                 package="POISSTEST",
@@ -63,9 +62,6 @@ POISSTESTOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..lambda <- jmvcore::OptionNumber$new(
                 "lambda",
                 lambda)
-            private$..n <- jmvcore::OptionInteger$new(
-                "n",
-                n)
 
             self$.addOption(private$..switch)
             self$.addOption(private$..dep)
@@ -75,7 +71,6 @@ POISSTESTOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..ci)
             self$.addOption(private$..conf)
             self$.addOption(private$..lambda)
-            self$.addOption(private$..n)
         }),
     active = list(
         switch = function() private$..switch$value,
@@ -85,8 +80,7 @@ POISSTESTOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         alt = function() private$..alt$value,
         ci = function() private$..ci$value,
         conf = function() private$..conf$value,
-        lambda = function() private$..lambda$value,
-        n = function() private$..n$value),
+        lambda = function() private$..lambda$value),
     private = list(
         ..switch = NA,
         ..dep = NA,
@@ -95,8 +89,7 @@ POISSTESTOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..alt = NA,
         ..ci = NA,
         ..conf = NA,
-        ..lambda = NA,
-        ..n = NA)
+        ..lambda = NA)
 )
 
 POISSTESTResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -104,7 +97,8 @@ POISSTESTResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         text = function() private$.items[["text"]],
-        poissontest = function() private$.items[["poissontest"]]),
+        poissontest = function() private$.items[["poissontest"]],
+        poissonci = function() private$.items[["poissonci"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -128,7 +122,7 @@ POISSTESTResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `type`="text"),
                     list(
                         `name`="NumberofEvents", 
-                        `type`="number"),
+                        `type`="integer"),
                     list(
                         `name`="Intervalbase", 
                         `type`="integer"),
@@ -138,7 +132,36 @@ POISSTESTResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="p", 
                         `type`="number", 
-                        `format`="zto,pvalue"))))}))
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="Lower", 
+                        `type`="number"),
+                    list(
+                        `name`="Upper", 
+                        `type`="number"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="poissonci",
+                title="Confidence Intervals for Poisson",
+                rows=3,
+                columns=list(
+                    list(
+                        `name`="var", 
+                        `title`="", 
+                        `type`="text"),
+                    list(
+                        `name`="method", 
+                        `title`="Method", 
+                        `type`="text"),
+                    list(
+                        `name`="lambda", 
+                        `type`="number"),
+                    list(
+                        `name`="Lower", 
+                        `type`="number"),
+                    list(
+                        `name`="Upper", 
+                        `type`="number"))))}))
 
 POISSTESTBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "POISSTESTBase",
@@ -172,11 +195,11 @@ POISSTESTBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ci .
 #' @param conf .
 #' @param lambda .
-#' @param n .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
 #'   \code{results$poissontest} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$poissonci} \tab \tab \tab \tab \tab a table \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -195,8 +218,7 @@ POISSTEST <- function(
     alt = "two.sided",
     ci = "exact",
     conf = 0.95,
-    lambda,
-    n) {
+    lambda) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("POISSTEST requires jmvcore to be installed (restart may be required)")
@@ -216,8 +238,7 @@ POISSTEST <- function(
         alt = alt,
         ci = ci,
         conf = conf,
-        lambda = lambda,
-        n = n)
+        lambda = lambda)
 
     analysis <- POISSTESTClass$new(
         options = options,

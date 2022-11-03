@@ -67,8 +67,4 @@ options:
     - name: lambda
       title: Lambda
       type: Number
-
-    - name: n
-      title: N
-      type: Integer  
 ...
