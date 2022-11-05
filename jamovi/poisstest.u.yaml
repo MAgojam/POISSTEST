@@ -16,6 +16,9 @@ children:
         name: switchs
         optionName: switch
         optionPart: fromsummary
+        events:
+          change: './poisstest.events::onChange_switch'
+
   - type: CollapseBox
     label: Work With Raw Data
     name: rpanel
@@ -47,9 +50,11 @@ children:
               - type: TextBox
                 name: lambda
                 format: number
+                enable: '(switch:fromsummary)'
               - type: TextBox
                 name: intervalValue
                 format: number
+                enable: '(switch:fromsummary)'
 
   - type: Label
     label: Analysis Options
